@@ -1,0 +1,46 @@
+header:
+  version: 9
+
+distro: "poky"
+
+repos:
+  poky:
+    url: "git://git.yoctoproject.org/poky.git"
+    refspec: "dunfell"
+    layers:
+      meta:
+      meta-poky:
+  meta-oe:
+    url: "git://git.openembedded.org/meta-openembedded"
+    refspec: "dunfell"
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+
+bblayers_conf_header:
+  standard: |
+    POKY_BBLAYERS_CONF_VERSION = "2"
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+
+local_conf_header:
+  standard: |
+    CONF_VERSION = "1"
+
+  whitelist_commercial: |
+    LICENSE_FLAGS_WHITELIST += "commercial_mongoose"
+
+  package_ipk: |
+    PACKAGE_CLASSES ?= "package_ipk"
+
+  diskmon: |
+    BB_DISKMON_DIRS = "\
+      STOPTASKS,${TMPDIR},1G,100K \
+      STOPTASKS,${DL_DIR},1G,100K \
+      STOPTASKS,${SSTATE_DIR},1G,100K \
+      STOPTASKS,/tmp,100M,100K \
+      ABORT,${TMPDIR},100M,1K \
+      ABORT,${DL_DIR},100M,1K \
+      ABORT,${SSTATE_DIR},100M,1K \
+      ABORT,/tmp,10M,1K"
